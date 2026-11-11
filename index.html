@@ -1,0 +1,696 @@
+
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>11:11 — A little universe</title>
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&family=Playfair+Display:wght@400;700&display=swap');
+
+*{box-sizing:border-box}
+
+body{
+ margin:0;
+ background:radial-gradient(ellipse at top,#29183e,#090711 70%);
+ color:#f8f1ff;
+ font-family:Cairo,sans-serif;
+ overflow-x:hidden;
+}
+
+#stars{
+ position:fixed;
+ inset:0;
+ pointer-events:none;
+ z-index:0;
+}
+
+.star{
+ position:absolute;
+ background:white;
+ border-radius:50%;
+ animation:twinkle 3s infinite alternate;
+}
+
+@keyframes twinkle{
+ to{
+  opacity:1;
+  transform:scale(1.8);
+  box-shadow:0 0 12px #cba5ff;
+ }
+}
+
+main{position:relative;z-index:1}
+
+section{
+ width:min(850px,92%);
+ margin:auto;
+ padding:85px 0;
+}
+
+.hero{
+ min-height:100vh;
+ display:flex;
+ align-items:center;
+ justify-content:center;
+ text-align:center;
+}
+
+.hero h1{
+ font:clamp(65px,15vw,115px) 'Playfair Display';
+ direction:ltr;
+ letter-spacing:8px;
+ color:#ead6ff;
+ text-shadow:0 0 35px #b78cff;
+}
+
+.name{font-size:35px;color:#e9caff}
+.small{color:#b9a9cb}
+
+.line{
+ height:1px;
+ width:90px;
+ margin:25px auto;
+ background:linear-gradient(90deg,transparent,#c49aff,transparent);
+}
+
+/* الأزرار الموحدة */
+
+button{
+ border:1px solid #b78cff;
+ color:white;
+ background:#241832;
+ padding:12px 25px;
+ border-radius:30px;
+ cursor:pointer;
+ font-family:inherit;
+ transition:.3s;
+}
+
+button:hover{
+ background:#593b78;
+ transform:translateY(-3px);
+}
+
+/* زر بنفسجي بسيط بلمعة طبيعية */
+
+.soft-button{
+ position:relative;
+ display:inline-flex;
+ align-items:center;
+ justify-content:center;
+ min-width:175px;
+ padding:14px 32px;
+ overflow:hidden;
+ isolation:isolate;
+
+ color:#fff;
+ background:linear-gradient(
+  135deg,
+  #805d9e,
+  #694782 50%,
+  #805d9e
+ );
+
+ border:1px solid #cba8e8;
+ border-radius:30px;
+
+ font-family:'Cairo',sans-serif;
+ font-size:16px;
+ font-weight:700;
+ letter-spacing:1px;
+
+ box-shadow:
+ 0 5px 18px #0005,
+ inset 0 1px 2px #ffffff40;
+
+ text-shadow:0 1px 5px #ffffff50;
+
+ transition:
+  transform .25s ease,
+  box-shadow .25s ease,
+  filter .25s ease;
+}
+
+/* اللمعة المتحركة */
+
+.soft-button::before{
+ content:"";
+ position:absolute;
+ top:-50%;
+ left:-100%;
+ width:55%;
+ height:200%;
+
+ background:linear-gradient(
+  90deg,
+  transparent,
+  #ffffff20,
+  #ffffff65,
+  #ffffff20,
+  transparent
+ );
+
+ transform:rotate(25deg);
+ animation:softShine 4s ease-in-out infinite;
+ z-index:-1;
+ pointer-events:none;
+}
+
+@keyframes softShine{
+ 0%,35%{left:-100%}
+ 75%,100%{left:150%}
+}
+
+.soft-button:hover{
+ transform:translateY(-3px);
+ filter:brightness(1.15);
+ box-shadow:
+ 0 8px 24px #a66bdf50,
+ inset 0 1px 4px #ffffff60;
+ background:linear-gradient(
+  135deg,
+  #936db3,
+  #76518f 50%,
+  #936db3
+ );
+}
+
+.soft-button:active{
+ transform:translateY(2px) scale(.97);
+ box-shadow:
+ 0 2px 8px #0005,
+ inset 0 2px 5px #0003;
+}
+
+.soft-button:focus-visible{
+ outline:2px solid #e5caff;
+ outline-offset:5px;
+}
+
+h2{text-align:center;font-size:30px}
+
+.tag{
+ text-align:center;
+ color:#c39bff;
+ letter-spacing:3px;
+ font-size:12px;
+ direction:ltr;
+}
+
+.desc{
+ text-align:center;
+ color:#b9a9cb;
+ line-height:2;
+}
+
+.card{
+ background:#ffffff08;
+ border:1px solid #c49aff30;
+ border-radius:22px;
+ padding:30px;
+ backdrop-filter:blur(10px);
+ box-shadow:0 15px 50px #0005;
+}
+
+/* الظرف */
+
+.envelope{
+ width:250px;
+ height:160px;
+ background:#704c91;
+ margin:35px auto;
+ position:relative;
+ border-radius:10px;
+ cursor:pointer;
+ display:grid;
+ place-items:center;
+}
+
+.envelope:before{
+ content:"";
+ position:absolute;
+ inset:0;
+ background:#a37bc6;
+ clip-path:polygon(0 0,100% 0,50% 60%);
+ transition:.6s;
+ transform-origin:top;
+}
+
+.envelope.open:before{transform:rotateX(180deg)}
+.seal{z-index:2;font-size:30px;color:#fff}
+
+.letter{
+ text-align:center;
+ line-height:2.3;
+ white-space:pre-line;
+ color:#e9dcf6;
+ max-height:0;
+ overflow:hidden;
+ opacity:0;
+ transition:.8s;
+}
+
+.letter.show{
+ max-height:500px;
+ opacity:1;
+ padding:20px;
+}
+
+/* التواريخ */
+
+.date{
+ text-align:center;
+ font:35px 'Playfair Display';
+ color:#e4c9ff;
+ direction:ltr;
+}
+
+.datebox{
+ padding:25px;
+ text-align:center;
+ border:1px solid #c49aff30;
+ border-radius:17px;
+ margin:12px 0;
+}
+
+/* لعبة النجوم */
+
+.star-game{
+ display:grid;
+ grid-template-columns:repeat(4,1fr);
+ gap:12px;
+ margin-top:30px;
+}
+
+.star-btn{
+ aspect-ratio:1;
+ border-radius:17px;
+ font-size:26px;
+ padding:0;
+ background:#ffffff08;
+}
+
+.star-btn.found{
+ background:#754a9b;
+ color:#fff;
+}
+
+.note{
+ text-align:center;
+ min-height:65px;
+ line-height:2;
+ margin-top:22px;
+ color:#e6d1ff;
+}
+
+/* خريطة النجوم */
+
+.constellation{
+ position:relative;
+ width:100%;
+ height:300px;
+ overflow:hidden;
+ border:1px solid #c49aff45;
+ border-radius:22px;
+ background:
+ radial-gradient(ellipse at center,#49305b55,transparent 75%),
+ linear-gradient(145deg,#151020,#0c0915);
+ box-shadow:inset 0 0 40px #a66bce15,0 10px 35px #0005;
+}
+
+.constellation svg{
+ width:100%;
+ height:100%;
+ overflow:visible;
+}
+
+.constellation path{
+ fill:none;
+ stroke:#bd9ae9;
+ stroke-width:1.5;
+ stroke-dasharray:4 5;
+ opacity:.65;
+}
+
+.constellation .glow{
+ fill:#d9bdff;
+ filter:drop-shadow(0 0 7px #c58cff)
+        drop-shadow(0 0 13px #a56bff);
+}
+
+.constellation .main-star{
+ fill:#fff;
+ filter:drop-shadow(0 0 5px white)
+        drop-shadow(0 0 12px #c18aff)
+        drop-shadow(0 0 22px #a66bff);
+}
+
+.constellation .star-cross{
+ stroke:#fff;
+ stroke-width:1;
+ opacity:.9;
+ filter:drop-shadow(0 0 5px #c18aff);
+}
+
+.constellation-label{
+ position:absolute;
+ bottom:12px;
+ left:0;
+ right:0;
+ text-align:center;
+ color:#e9d3ff;
+ font:20px 'Playfair Display';
+ letter-spacing:12px;
+ text-shadow:0 0 15px #b78cff;
+}
+
+.final{
+ text-align:center;
+ min-height:65vh;
+ display:flex;
+ flex-direction:column;
+ justify-content:center;
+}
+
+footer{
+ text-align:center;
+ color:#746783;
+ padding:35px;
+ font-size:12px;
+}
+
+@media(max-width:500px){
+ section{padding:65px 0}
+ .card{padding:20px}
+ .star-game{gap:8px}
+ .constellation{height:240px}
+ .soft-button{
+  min-width:160px;
+  padding:13px 28px;
+ }
+}
+</style>
+</head>
+
+<body>
+
+<div id="stars"></div>
+
+<main>
+
+<!-- الواجهة الرئيسية -->
+
+<section class="hero">
+ <div>
+  <div class="tag">A LITTLE UNIVERSE</div>
+  <h1>11:11</h1>
+  <div class="name">رقية · رورو</div>
+  <div class="line"></div>
+  <p class="small">11 / 11 / 2026</p>
+
+  <button class="soft-button" onclick="go('letterSection')">
+   <span>Ramos ✦</span>
+  </button>
+ </div>
+</section>
+
+<!-- الرسالة -->
+
+<section id="letterSection">
+ <div class="tag">01 — THE LETTER</div>
+ <h2>رسالة لأحلى بنت في الدنيا كلها</h2>
+ <p class="desc">رقيههههههههههههههههههههههههه ♡</p>
+
+ <div class="card">
+  <div class="envelope" id="envelope" onclick="openLetter()">
+   <span class="seal">♡</span>
+  </div>
+
+  <div class="letter" id="letter"></div>
+ </div>
+</section>
+
+<!-- الذكرى -->
+
+<section>
+ <div class="tag">02 — A SPECIAL MEMORY</div>
+ <h2>يوم مش عادي</h2>
+
+ <div class="card">
+  <div class="datebox">
+   <div class="date">04 / 04 / 2026</div>
+   <p class="desc">يوم عيد ميلادك، وأحسن يوم بالنسبالي.</p>
+  </div>
+
+  <div class="desc" id="memory"></div>
+ </div>
+</section>
+
+<!-- النجوم المخفية -->
+
+<section>
+ <div class="tag">03 — HIDDEN STARS</div>
+ <h2>اختاري نجمة</h2>
+ <p class="desc">كل نجمة وراها تفصيلة مختلفة.</p>
+
+ <div class="card">
+  <div class="star-game" id="starGame"></div>
+  <div class="note" id="note">اختاري نجمة ✦</div>
+ </div>
+</section>
+
+<!-- لحظة أمنية -->
+
+<section>
+ <div class="tag">04 — 11:11</div>
+ <h2>لحظة أمنية</h2>
+
+ <div class="card" style="text-align:center">
+  <div class="date" style="font-size:75px">11:11</div>
+  <div class="line"></div>
+  <p class="desc" id="wish"></p>
+ </div>
+</section>
+
+<!-- خريطة النجوم -->
+
+<section>
+ <div class="tag">05 — CONSTELLATION</div>
+ <h2>خريطة نجوم رورو</h2>
+ <p class="desc">مجموعة نجوم اتجمعت عشان ترسم اسمك في السما.</p>
+
+ <div class="constellation">
+
+  <svg viewBox="0 0 600 300" preserveAspectRatio="xMidYMid meet">
+
+   <defs>
+    <filter id="starGlow">
+     <feGaussianBlur stdDeviation="4" result="blur"/>
+     <feMerge>
+      <feMergeNode in="blur"/>
+      <feMergeNode in="SourceGraphic"/>
+     </feMerge>
+    </filter>
+   </defs>
+
+   <g>
+    <!-- R -->
+    <path d="M65 75 L65 220 L65 75 L130 75 L155 95 L130 120 L65 120 L155 220"/>
+    <!-- O -->
+    <path d="M205 75 L265 75 L280 95 L280 200 L265 220 L205 220 L190 200 L190 95 Z"/>
+    <!-- R -->
+    <path d="M325 75 L325 220 L325 75 L390 75 L415 95 L390 120 L325 120 L415 220"/>
+    <!-- O -->
+    <path d="M465 75 L525 75 L540 95 L540 200 L525 220 L465 220 L450 200 L450 95 Z"/>
+   </g>
+
+   <!-- النجوم الرئيسية -->
+
+   <g class="main-star">
+    <circle cx="65" cy="75" r="5"/>
+    <circle cx="65" cy="145" r="4"/>
+    <circle cx="65" cy="220" r="5"/>
+    <circle cx="130" cy="75" r="4"/>
+    <circle cx="155" cy="95" r="4"/>
+    <circle cx="130" cy="120" r="4"/>
+    <circle cx="155" cy="220" r="5"/>
+
+    <circle cx="205" cy="75" r="5"/>
+    <circle cx="265" cy="75" r="5"/>
+    <circle cx="280" cy="95" r="4"/>
+    <circle cx="280" cy="200" r="4"/>
+    <circle cx="265" cy="220" r="5"/>
+    <circle cx="205" cy="220" r="5"/>
+    <circle cx="190" cy="200" r="4"/>
+    <circle cx="190" cy="95" r="4"/>
+
+    <circle cx="325" cy="75" r="5"/>
+    <circle cx="325" cy="145" r="4"/>
+    <circle cx="325" cy="220" r="5"/>
+    <circle cx="390" cy="75" r="4"/>
+    <circle cx="415" cy="95" r="4"/>
+    <circle cx="390" cy="120" r="4"/>
+    <circle cx="415" cy="220" r="5"/>
+
+    <circle cx="465" cy="75" r="5"/>
+    <circle cx="525" cy="75" r="5"/>
+    <circle cx="540" cy="95" r="4"/>
+    <circle cx="540" cy="200" r="4"/>
+    <circle cx="525" cy="220" r="5"/>
+    <circle cx="465" cy="220" r="5"/>
+    <circle cx="450" cy="200" r="4"/>
+    <circle cx="450" cy="95" r="4"/>
+   </g>
+
+   <!-- نجوم صغيرة -->
+
+   <g class="glow">
+    <circle cx="35" cy="40" r="2"/>
+    <circle cx="170" cy="45" r="2"/>
+    <circle cx="300" cy="40" r="2"/>
+    <circle cx="435" cy="45" r="2"/>
+    <circle cx="565" cy="40" r="2"/>
+    <circle cx="35" cy="255" r="2"/>
+    <circle cx="170" cy="265" r="2"/>
+    <circle cx="300" cy="255" r="2"/>
+    <circle cx="435" cy="265" r="2"/>
+    <circle cx="565" cy="255" r="2"/>
+   </g>
+
+   <!-- بريق النجوم -->
+
+   <g class="star-cross">
+    <path d="M65 58 V92 M48 75 H82"/>
+    <path d="M280 83 V107 M268 95 H292"/>
+    <path d="M415 83 V107 M403 95 H427"/>
+    <path d="M540 183 V217 M523 200 H557"/>
+   </g>
+
+  </svg>
+
+  <div class="constellation-label">R O R O ✦</div>
+ </div>
+</section>
+
+<!-- المفاجأة القادمة -->
+
+<section class="final">
+ <div class="tag">06 — THE NEXT CHAPTER</div>
+ <h2>لسه في مفاجأة جاية</h2>
+
+ <div class="card">
+  <p class="desc" id="promise"></p>
+
+  <div class="date">04 / 04 / 2027</div>
+
+  <div class="line"></div>
+
+  <button class="soft-button" onclick="surprise()">
+   <span>اضغطي هنا ✦</span>
+  </button>
+
+  <div class="note" id="surprise"></div>
+ </div>
+</section>
+
+</main>
+
+<footer>11:11 — A little universe</footer>
+
+<script>
+
+const CONTENT = {
+
+ letter: `رقية،
+
+حبيت أعملك حاجة بسيطة، وبجد عايز أقولك إنك أحسن حد في الدنيا كلها، وأحلى حد في الدنيا كلها.
+
+مهما أتكلم عنك وعن جمالك مش هعرف أديكي حقك، ما شاء الله عليكي.
+
+وأي حاجة أنا زعلتك فيها أو ضايقتك، فأنا آسف، ودايمًا ببقى أنا اللي غلطان.
+
+والله العظيم إنتي مفيش أحلى منك، أقسم بالله العظيم إنتي أحسن واحدة في الدنيا كلها.`,
+
+ memory: `ولو رجع بيا الزمن سنة من النهارده، هختار أعيش نفس التفاصيل تاني، بنفس اللحظات ونفس الذكريات، من غير ما أغيّر حاجة.
+
+4/4/2026 كان يوم عيد ميلادك، وبالنسبالي كان من أحسن الأيام اللي عشتها. فاكر اليوم ده كويس، وتفاصيله لسه ليها مكانها عندي.
+
+في أيام بتعدي، وفي أيام بتفضل فاكرها مهما الوقت عدى.`,
+
+ stars: [
+  "4/4/2026 يوم عمره ما كان عادي بالنسبالي واحسن يوم في حياتي.",
+  "والله العظيم احلي واحده في دنيا.",
+  "بقولها للمره مليون انتي احلي حاجه في حياه.",
+  "راموسسسسسسسسسسسسسسسسسسسسسس.",
+  "اي وعد قولته هعمله.",
+  "انتي قمرررررررررررررررررررررر.",
+  "احلي من قمر والله.",
+  "."
+ ],
+
+ wish: `انتي احلي حاجه في حياتي كلها.`,
+
+ promise: `عايز أقولك إن اليوم ده مش هيكون يوم عادي.
+محضّرلك مفاجأة كبيرة جدًا، ووعد مني إن 4/4/2027 هيكون يوم مليان تفاصيل ومفاجآت حلوة.
+مش هقول أكتر من كده… خلي الباقي لوقته.`
+};
+
+document.getElementById("letter").textContent=CONTENT.letter;
+document.getElementById("memory").textContent=CONTENT.memory;
+document.getElementById("wish").textContent=CONTENT.wish;
+document.getElementById("promise").textContent=CONTENT.promise;
+
+function go(id){
+ document.getElementById(id).scrollIntoView({
+  behavior:"smooth"
+ });
+}
+
+function openLetter(){
+ document.getElementById("envelope").classList.add("open");
+ document.getElementById("letter").classList.add("show");
+}
+
+const game=document.getElementById("starGame");
+
+CONTENT.stars.forEach((message)=>{
+ const b=document.createElement("button");
+ b.className="star-btn";
+ b.textContent="✧";
+
+ b.onclick=()=>{
+  b.classList.add("found");
+  b.textContent="★";
+  document.getElementById("note").textContent=message;
+ };
+
+ game.appendChild(b);
+});
+
+function surprise(){
+ document.getElementById("surprise").textContent=
+ "✦ ♡ ✧ كل التفاصيل الحلوة لسه جاية ✧ ♡ ✦";
+}
+
+// نجوم الخلفية
+
+for(let i=0;i<110;i++){
+ const s=document.createElement("span");
+ s.className="star";
+ s.style.left=Math.random()*100+"%";
+ s.style.top=Math.random()*100+"%";
+
+ let size=1+Math.random()*2;
+ s.style.width=size+"px";
+ s.style.height=size+"px";
+ s.style.animationDelay=Math.random()*4+"s";
+ s.style.opacity=.2+Math.random()*.6;
+
+ document.getElementById("stars").appendChild(s);
+}
+
+</script>
+</body>
+</html>
